@@ -16,6 +16,9 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
+     dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+    },
     config = function()
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
       local lspconfig = require("lspconfig")
@@ -25,15 +28,33 @@ return {
       lspconfig.ts_ls.setup({
         capabilities = capabilities,
       })
-       lspconfig.html.setup({
-        capabilities = capabilities
-      })
-      lspconfig.gopls.setup({
+      lspconfig.html.setup({
         capabilities = capabilities,
       })
+
+      lspconfig.gopls.setup({
+        capabilities = capabilities,
+        settings = {
+          gopls = {
+            gofumpt = true,
+            staticcheck = true,
+            analyses = {
+              unusedparams = true,
+              shadow = true,
+            },
+          },
+        },
+      })
+
       vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
       vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})
+      
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        callback = function()
+          vim.lsp.buf.format({ async = false })
+        end,
+      })
     end,
   },
 }
