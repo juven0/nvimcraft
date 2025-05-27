@@ -9,13 +9,9 @@ return {
         null_ls.builtins.formatting.prettier.with({
           filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact", "json", "yaml", "markdown" },
         }),
-        null_ls.builtins.diagnostics.eslint_d.with({
-          condition = function(utils)
-            return utils.root_has_file({ ".eslintrc.js", ".eslintrc.json" })
-          end,
-        }),
-        null_ls.builtins.formatting.goimports,
+
         null_ls.builtins.diagnostics.eslint_d,
+        null_ls.builtins.formatting.goimports,
         null_ls.builtins.diagnostics.golangci_lint,
         null_ls.builtins.completion.spell,
       },
